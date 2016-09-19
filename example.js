@@ -1,4 +1,6 @@
 // in some file that is in the root directory of our application
+var express = require( 'express' );
+var app = express();
 var nunjucks = require('nunjucks');
 
 var locals = {
