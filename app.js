@@ -28,5 +28,6 @@ app.get("/", function(request, response, next) {
 });
 
 app.get("/news", function(request, response, next) {
-  response.send("Hello from news");
+  // response.send("Hello from news");
 })
+
