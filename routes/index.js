@@ -1,47 +1,52 @@
-var express = require('express');
-var router = express.Router();
-// could use one line instead: var router = require('express').Router();
-var tweetBank = require('../tweetBank');
-var bodyParser = require('body-parser');
+module.exports = function (io) {
 
-// parse application/x-www-form-urlencoded
-router.use(bodyParser.urlencoded({ extended: false }))
+  var express = require('express');
+  var router = express.Router();
+  // could use one line instead: var router = require('express').Router();
+  var tweetBank = require('../tweetBank');
+  var bodyParser = require('body-parser');
 
-// parse application/json
-router.use(bodyParser.json())
 
-// router.use(function (req, res) {
-//   res.setHeader('Content-Type', 'text/plain')
-//   res.write('you posted:\n')
-//   res.end(JSON.stringify(req.body, null, 2))
-//   next();
-// });
+  // parse application/x-www-form-urlencoded
+  router.use(bodyParser.urlencoded({ extended: false }))
 
-router.get('/', function (req, res) {
-  var tweets = tweetBank.list();
-  res.render( 'index', { tweets: tweets, showForm: true });
-});
+  // parse application/json
+  router.use(bodyParser.json())
 
-router.post('/tweets', function(req, res) {
-  var name = req.body.name;
-  var text = req.body.text;
-  tweetBank.add(name, text);
-  res.redirect('/');
-});
+  // router.use(function (req, res) {
+  //   res.setHeader('Content-Type', 'text/plain')
+  //   res.write('you posted:\n')
+  //   res.end(JSON.stringify(req.body, null, 2))
+  //   next();
+  // });
 
-router.use(express.static('public'));
+  router.get('/', function (req, res) {
+    var tweets = tweetBank.list();
+    res.render( 'index', { tweets: tweets, showForm: true });
+  });
 
-router.get('/users/:name', function(req, res) {
-  var name = req.params.name;
-  var tweets = tweetBank.find( {name: name} );
-  res.render( 'index', { tweets: tweets, showForm: true, users: [name], userPage: true });
-  // var element =
-});
+  router.post('/tweets', function(req, res) {
+    var name = req.body.name;
+    var text = req.body.text;
+    tweetBank.add(name, text);
+    io.sockets.emit('newTweet', { name: name });
+    res.redirect('/');
+  });
 
-router.get('/tweets/:id', function(req,res,next) {
-  var id = req.params.id;
-  var tweets = tweetBank.find( {id: parseInt(id)});
-  res.render( 'index', {tweets: tweets})
-})
+  router.use(express.static('public'));
 
-module.exports = router;
+  router.get('/users/:name', function(req, res) {
+    var name = req.params.name;
+    var tweets = tweetBank.find( {name: name} );
+    res.render( 'index', { tweets: tweets, showForm: true, users: [name], userPage: true });
+    // var element =
+  });
+
+  router.get('/tweets/:id', function(req,res,next) {
+    var id = req.params.id;
+    var tweets = tweetBank.find( {id: parseInt(id)});
+    res.render( 'index', {tweets: tweets})
+  })
+
+  return router;
+};

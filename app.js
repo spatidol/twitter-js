@@ -5,17 +5,20 @@ var nunjucks = require('nunjucks');
 
 var volleyball = require('volleyball');
 
+var socketio = require('socket.io');
+
 app.use(volleyball);
 
 var routes = require('./routes/');
-app.use('/', routes);
 
 
-app.listen(3000, function() {
+
+var server = app.listen(3000, function() {
   console.log("server listening")
 });
 
-
+var io = socketio.listen(server);
+app.use( '/', routes(io) );
 
 // app.use("/", function(req, res, next) {
 //   res.render( 'index', {title: 'Hall of Fame', people: people} );
