@@ -1,6 +1,4 @@
 // in some file that is in the root directory of our application
-var express = require( 'express' );
-var app = express();
 var nunjucks = require('nunjucks');
 
 var locals = {
@@ -12,7 +10,7 @@ var locals = {
     ]
 };
 nunjucks.configure('views', {noCache: true});
-nunjucks.render('index.html', locals, function (err, output) {
+nunjucks.render('index.html', locals,  function (err, output) {
   if (err) throw Error();
     console.log(output);
 });
