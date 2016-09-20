@@ -13,9 +13,25 @@
     </div>
     <div class="col-md-9">
 
+{% if showForm %}
+  <form action="/tweets" method="POST">
+    <label for="name_field">Name:</label>
+    {% if userPage %} {% for user in users %}
+    <input name="name" value="{{user}}" type="text" id="name_field" style = "width=200px"/>
+    {% endfor %} {%else%}
+    <input name="name" type="text" id="name_field" style = "width=200px"/>
+    {%endif%}
+    <label for="text_field">Text:</label>
+    <input name="text" type="text" id="text_field" style="width: 350px;" />
+
+    <input type="submit" value="Submit" />
+  </form>
+{% endif %}
+
     <!--   display tweets here -->
+    <h3>ALL TWEETS</h3>
       {% for tweet in tweets %}
-        <li>{{tweet.content}}</li>
+        <li><a href="/users/{{tweet.name}}">{{tweet.name}}</a> - <a href='/tweets/{{tweet.id}}'>{{tweet.content}}</a></li>
       {% endfor %}
 
     </div>

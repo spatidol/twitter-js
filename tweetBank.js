@@ -3,9 +3,10 @@ var _ = require('lodash');
 
 var data = [];
 
-
+var newid = 1;
 function add (name, content) {
-  data.push({ name: name, content: content });
+  data.push({ name: name, content: content, id: newid });
+  newid++;
 }
 
 function list () {
@@ -41,7 +42,7 @@ for (var i = 0; i < 10; i++) {
 }
 
 
-// module.exports.add("allie", "Fullstack!");
+module.exports.add("allie", "Fullstack!");
 
 
 // var ans = module.exports.find( {'name' : 'allie'});
